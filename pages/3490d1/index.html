@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redis - 分布式缓存 | Captain&#39;s Geek-Island </title>
+    <meta name="generator" content="VuePress 1.9.7">
+    <link rel="icon" href="https://gallery.sleepyocean.cn/resource/img/50b2e94f2e2b79e95815418b0960ac6b">
+    <meta name="description" content="Java架构师博客,简洁至上,专注Java架构的学习与总结。Java,Spring,中间件,Docker,Linux,vue,js,css3,html5,Node,git,github等技术文章。">
+    <meta name="keywords" content="沉睡的海洋,架构师博客,个人技术博客,Java,服务端架构,中间件,运维,容器,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown">
+    <meta name="theme-color" content="#11a8cd">
+    <link rel="preload" href="/assets/css/0.styles.7960a175.css" as="style"><link rel="preload" href="/assets/js/app.c96e85b8.js" as="script"><link rel="preload" href="/assets/js/2.826e337c.js" as="script"><link rel="preload" href="/assets/js/3.a6e9fd4b.js" as="script"><link rel="preload" href="/assets/js/38.2b3a5988.js" as="script"><link rel="prefetch" href="/assets/js/10.b812aa41.js"><link rel="prefetch" href="/assets/js/11.7a537214.js"><link rel="prefetch" href="/assets/js/12.69528e17.js"><link rel="prefetch" href="/assets/js/13.5ebb4e7c.js"><link rel="prefetch" href="/assets/js/14.1af2ac53.js"><link rel="prefetch" href="/assets/js/15.b1c5046d.js"><link rel="prefetch" href="/assets/js/16.5cfd9db1.js"><link rel="prefetch" href="/assets/js/17.c7453cd0.js"><link rel="prefetch" href="/assets/js/18.1a6cb4ac.js"><link rel="prefetch" href="/assets/js/19.aec89221.js"><link rel="prefetch" href="/assets/js/20.79fc6db3.js"><link rel="prefetch" href="/assets/js/21.fa057f7a.js"><link rel="prefetch" href="/assets/js/22.9a862b68.js"><link rel="prefetch" href="/assets/js/23.4780ca06.js"><link rel="prefetch" href="/assets/js/24.0cf067ff.js"><link rel="prefetch" href="/assets/js/25.bfb48e5a.js"><link rel="prefetch" href="/assets/js/26.4b43bb93.js"><link rel="prefetch" href="/assets/js/27.34d6536b.js"><link rel="prefetch" href="/assets/js/28.193a4261.js"><link rel="prefetch" href="/assets/js/29.0f14f87a.js"><link rel="prefetch" href="/assets/js/30.e0e7b8a2.js"><link rel="prefetch" href="/assets/js/31.0f21368f.js"><link rel="prefetch" href="/assets/js/32.9de47624.js"><link rel="prefetch" href="/assets/js/33.c57a62a5.js"><link rel="prefetch" href="/assets/js/34.d77e4773.js"><link rel="prefetch" href="/assets/js/35.54e6883b.js"><link rel="prefetch" href="/assets/js/36.3e744374.js"><link rel="prefetch" href="/assets/js/37.f0f74c38.js"><link rel="prefetch" href="/assets/js/39.0e8cc43f.js"><link rel="prefetch" href="/assets/js/4.93959110.js"><link rel="prefetch" href="/assets/js/40.b2da5dbc.js"><link rel="prefetch" href="/assets/js/41.ca48bb91.js"><link rel="prefetch" href="/assets/js/42.98043548.js"><link rel="prefetch" href="/assets/js/43.d15f1a58.js"><link rel="prefetch" href="/assets/js/44.463bbed9.js"><link rel="prefetch" href="/assets/js/45.75da9f4f.js"><link rel="prefetch" href="/assets/js/46.4fb3ba55.js"><link rel="prefetch" href="/assets/js/47.42e3cd44.js"><link rel="prefetch" href="/assets/js/48.bfc99eeb.js"><link rel="prefetch" href="/assets/js/49.68b22ae6.js"><link rel="prefetch" href="/assets/js/5.2c067fba.js"><link rel="prefetch" href="/assets/js/50.37e8b9d2.js"><link rel="prefetch" href="/assets/js/51.d69bee84.js"><link rel="prefetch" href="/assets/js/52.fabf67b5.js"><link rel="prefetch" href="/assets/js/53.a95d93fd.js"><link rel="prefetch" href="/assets/js/54.242b42ad.js"><link rel="prefetch" href="/assets/js/55.0650b867.js"><link rel="prefetch" href="/assets/js/56.8d843ab9.js"><link rel="prefetch" href="/assets/js/57.5ca63a58.js"><link rel="prefetch" href="/assets/js/58.a3f2a035.js"><link rel="prefetch" href="/assets/js/59.3d94b7c7.js"><link rel="prefetch" href="/assets/js/6.90c4ec50.js"><link rel="prefetch" href="/assets/js/60.47594462.js"><link rel="prefetch" href="/assets/js/61.de3fe5cf.js"><link rel="prefetch" href="/assets/js/62.c7fe5c09.js"><link rel="prefetch" href="/assets/js/63.4f8c297f.js"><link rel="prefetch" href="/assets/js/64.6acb09a7.js"><link rel="prefetch" href="/assets/js/65.a1d808d6.js"><link rel="prefetch" href="/assets/js/66.e484a759.js"><link rel="prefetch" href="/assets/js/67.b7f98ede.js"><link rel="prefetch" href="/assets/js/68.6260ee22.js"><link rel="prefetch" href="/assets/js/69.be0ee05d.js"><link rel="prefetch" href="/assets/js/7.8a83d60b.js"><link rel="prefetch" href="/assets/js/70.22135345.js"><link rel="prefetch" href="/assets/js/71.1fc8d19b.js"><link rel="prefetch" href="/assets/js/72.411f3336.js"><link rel="prefetch" href="/assets/js/73.b8e8b465.js"><link rel="prefetch" href="/assets/js/74.7eee4170.js"><link rel="prefetch" href="/assets/js/75.0489520b.js"><link rel="prefetch" href="/assets/js/76.860215b3.js"><link rel="prefetch" href="/assets/js/77.3c4796bb.js"><link rel="prefetch" href="/assets/js/78.7195433a.js"><link rel="prefetch" href="/assets/js/79.3cf7c079.js"><link rel="prefetch" href="/assets/js/8.b0aeb8ce.js"><link rel="prefetch" href="/assets/js/80.bfc2ee51.js"><link rel="prefetch" href="/assets/js/81.37b061f0.js"><link rel="prefetch" href="/assets/js/82.7b80b3bb.js"><link rel="prefetch" href="/assets/js/83.8d5b8062.js"><link rel="prefetch" href="/assets/js/84.91155afd.js"><link rel="prefetch" href="/assets/js/85.638e855f.js"><link rel="prefetch" href="/assets/js/86.50775cc3.js"><link rel="prefetch" href="/assets/js/87.7734368b.js"><link rel="prefetch" href="/assets/js/88.87318692.js"><link rel="prefetch" href="/assets/js/89.28816162.js"><link rel="prefetch" href="/assets/js/9.3a26789c.js"><link rel="prefetch" href="/assets/js/90.fc705619.js"><link rel="prefetch" href="/assets/js/91.f0173d4b.js"><link rel="prefetch" href="/assets/js/92.d73c5ef8.js"><link rel="prefetch" href="/assets/js/93.61e61260.js"><link rel="prefetch" href="/assets/js/94.4b8962a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.7960a175.css">
+  </head>
+  <body class="theme-mode-light">
+    <div id="app" data-server-rendered="true"><div class="theme-container sidebar-open have-rightmenu"><header class="navbar blur"><div title="目录" class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="https://gallery.sleepyocean.cn/resource/img/50b2e94f2e2b79e95815418b0960ac6b" alt="Captain's Geek-Island " class="logo"> <span class="site-name can-hide">Captain's Geek-Island </span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/what-is-life-all-about/" class="nav-link">生活如斯乎</a></div><div class="nav-item"><a href="/architect-road/" class="nav-link">架构师的路</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="探索指南" class="dropdown-title"><a href="/archives/" class="link-title">探索指南</a> <span class="title" style="display:none;">探索指南</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div><div class="nav-item"><a href="https://blog.sleepyocean.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  沉洋官网
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar" style="display:none;"><div class="blogger"><img src="https://gallery.sleepyocean.cn/resource/img/a95dea0d07aeee1aac8a4fe39143b92f"> <div class="blogger-info"><h3>SleepyOcean</h3> <span>
+        走，找新大陆去
+      </span></div></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">首页</a></div><div class="nav-item"><a href="/what-is-life-all-about/" class="nav-link">生活如斯乎</a></div><div class="nav-item"><a href="/architect-road/" class="nav-link">架构师的路</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="探索指南" class="dropdown-title"><a href="/archives/" class="link-title">探索指南</a> <span class="title" style="display:none;">探索指南</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/" class="nav-link">分类</a></li><li class="dropdown-item"><!----> <a href="/tags/" class="nav-link">标签</a></li><li class="dropdown-item"><!----> <a href="/archives/" class="nav-link">归档</a></li></ul></div></div><div class="nav-item"><a href="https://blog.sleepyocean.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  沉洋官网
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>计算机基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>并发专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>性能调优专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>工具专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>源码框架专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>设计模式</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>分布式专题</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/pages/3490d1/" aria-current="page" class="active sidebar-link">Redis - 分布式缓存</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/3490d1/#一、redis数据类型" class="sidebar-link">一、Redis数据类型</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/3490d1/#_1-使用场景" class="sidebar-link">1）使用场景</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_2-基础操作" class="sidebar-link">2）基础操作</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_3-通用操作" class="sidebar-link">3）通用操作</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_4-三大特殊数据类型" class="sidebar-link">4）三大特殊数据类型</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#二、redis特性" class="sidebar-link">二、Redis特性</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/pages/3490d1/#_1-淘汰策略" class="sidebar-link">1）淘汰策略</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_2-事务" class="sidebar-link">2）事务</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_3-持久化" class="sidebar-link">3）持久化</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_3-redis高性能的原因" class="sidebar-link">3）Redis高性能的原因</a></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#_4-redis缓存相关问题" class="sidebar-link">4）Redis缓存相关问题</a></li></ul></li><li class="sidebar-sub-header"><a href="/pages/3490d1/#四、redis集群架构" class="sidebar-link">四、Redis集群架构</a></li></ul></li><li><a href="/pages/f61843/" class="sidebar-link">Zookeeper - 分布式协调服务</a></li><li><a href="/pages/f04be1/" class="sidebar-link">Kafka - 分布式消息</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>实战专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>技术杂文</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>云原生专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>大数据分析专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>前端专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>运维专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>经验专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>面试专题</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>软实力专题</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <div><main class="page"> <div class="theme-vdoing-wrapper"><div class="articleInfo-wrap" data-v-6fce21b8><div class="articleInfo" data-v-6fce21b8><ul class="breadcrumbs" data-v-6fce21b8><li data-v-6fce21b8><a href="/" title="首页" class="iconfont icon-home router-link-active" data-v-6fce21b8></a></li> <li data-v-6fce21b8><a href="/architect-road" title="架构师的路-目录页" data-v-6fce21b8>架构师的路</a></li> <li data-v-6fce21b8><a href="/architect-road/#分布式专题" title="架构师的路#分布式专题" data-v-6fce21b8>分布式专题</a></li></ul> <div class="info" data-v-6fce21b8><div title="作者" class="author iconfont icon-touxiang" data-v-6fce21b8><a href="https://github.com/SleepyOcean" target="_blank" title="作者" class="beLink" data-v-6fce21b8>SleepyOcean</a></div> <div title="创建时间" class="date iconfont icon-riqi" data-v-6fce21b8><a href="javascript:;" data-v-6fce21b8>2020-03-28</a></div> <!----></div></div></div> <!----> <div class="content-wrapper"><div class="right-menu-wrapper"><div class="right-menu-margin"><div class="right-menu-content"></div></div></div> <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAABKFJREFUSA3tVl1oFVcQnrMbrak3QUgkya1akpJYcrUtIqW1JvFBE9LiQ5v6JmJpolbMg32rVrhgoYK0QiMY6i9Y6EMaW5D+xFJaTYItIuK2Kr3+BJNwkxBj05sQY3b3nM6cs2dv9t7NT/vQJw/sndk5M/PNzJkzewGerP+pAmy+ON8lLzUJgA8ZYxYIYZmGYRnctDaWvJJAmTtfP1pvXsBCCPP8QFcCaRkZYACgDZFO4stNIcBCajEOlmmC9XpJ9bAGCaPaPmzPl32dvLSVu3BWCTQs0XQQ6g0DYgwLIoAZbBCdW/i+781o1VVlm/410mw4h06Y7bIPHNyWDyL4FHkX03Q8SrzNhZTZriieckWt7cL6MM85YcLpsi/7O9/iXFT6MswI0DmmpkSaJ0qLxFIm3+i1THHB3zmBH3PYx9CcykcLOeQVVa7QtdxTgQgEleX2AjHYfwA+2ddV77ruGoJUbhGDI09YSNXyMpUt5ylOzxgbUmtOp7NmbNt8v3arjTBfYELmLUV+M+nSawNNAUqpT3ClJWg5I3BLT+cGW/DXNGCa6tx1aakCGEigArTn4TDIPdrXXYKCZNrHLMCOEPvHBlLQ99s9eHB7EB6NTki73CVPQ2F5MSx/uRQixfmq7rK0wYD8w8E905bnPDfwoWs/rfv93NWN/ZfvwsLIU7A09gxECyISeGJkHAau98L97tuw7NXnoPyNF8FcYGLGKsOs0mN3OEyec9esGW/ZEl945dTP34wlR2FZVQWU1q0Cw8Tr7p+hgLLNL0FPxx/Q35mA8aEUrH6nCgwEl0tn7wUiZYJnNRh6DK4UH/k0lfyrsBKdPVv/AriGIQcEDQZ65LBAGe2Rzui9Ybjz7XUppz1/uKBbyVPGkN3ZAeC6hr0x7Nr38N5+EqkoOm17xpoqR9ohQF55ERSvr4Dkr3chNfC3DMzGJlNBElW8w9nsGQvhNGIzDkXzCg8cLK951xHsFBlTJspJNi3ZFIMF2AeDV3q8DNOB+YHi6QTrChDIWDBRi5U5f+ZMfJLu3ccrqxtdxk4SKH336LFxSmkqefwU5T8fhdSdQf9IVKD6aNiwI/hnmcAZ91isYMJIaCUCx9W098+LgruikeTqzqqxKPUwqJyCPJiyemVVZBOijDGjD38Os0jOiSPL1z3SPjXNANbiNPXAdzTfukjjuknNBbyz3nwgTd3AVFqUJ5hpHlq9MveLnWwttUfoygBmvVjuikxND3znrhsELnZk7k+OjIGxeNEkomyLVta0xxn+HZhjBc4YZ/AFjHjz9u3xRZl2BN4aq9nFwWh16IrQ1aHHEd3j1+4/dB9OtH4e29A2H1DyHQRmOSfQZ1Fy7MHBTGB6J/Djq6p3OxyO2cB+4Car7v/o3GXgfAkj23+x9ID1Teoamo/SXcbvSf2PX7Vc8DdCmE1vN9di+32P9/5YR3vLnhCVGUWBjEkr3yh4H8v9CzmsbdhzOKzsJKM90iFdaTMjRPhGVsakRvOaRidljo6H6G7j+ctrJpsP+4COhDIl0La2+FS4+5mlocBaXY5QnGZysIBYoeSsl5qQzrSj/cgNrfuEzlWBfwA+EjrZyWUvpAAAAABJRU5ErkJggg==">
+          Redis - 分布式缓存
+        </h1> <div class="theme-vdoing-content content__default"><p>Redis 是 C 语言开发的一个开源的（遵从 BSD 协议）高性能键值对（key-value）的内存数据库，可以用作数据库、缓存、消息中间件等。它是一种 NoSQL（not-only sql，泛指非关系型数据库）的数据库。</p> <p>Redis 作为一个内存数据库：</p> <ul><li><p>性能优秀，数据在内存中，读写速度非常快，支持并发 10W QPS。</p></li> <li><p>单进程单线程，是线程安全的，采用 IO 多路复用机制。</p></li> <li><p>丰富的数据类型，支持字符串（strings）、散列（hashes）、列表（lists）、集合（sets）、有序集合（sorted sets）等。</p></li> <li><p>支持数据持久化。</p> <p>可以将内存中数据保存在磁盘中，重启时加载。</p></li> <li><p>主从复制，哨兵，高可用。</p></li> <li><p>可以用作分布式锁。</p></li> <li><p>可以作为消息中间件使用，支持发布订阅。</p></li></ul> <h2 id="一、redis数据类型"><a href="#一、redis数据类型" class="header-anchor">#</a> 一、Redis数据类型</h2> <p><img src="https://gallery.sleepyocean.cn/resource/img/1b7f7c8eeb3e4790755a92b5ab906ed0" alt="博文 - redis数据类型图表"></p> <h3 id="_1-使用场景"><a href="#_1-使用场景" class="header-anchor">#</a> 1）使用场景</h3> <p><strong>string类型的应用场景</strong></p> <p>最常规的set/get操作，value可以是String也可以是数字。一般做<strong>一些复杂的计数功能的缓存</strong>和<strong>spring session + redis实现session共享</strong>。</p> <div class="language-shell line-numbers-mode"><pre class="language-shell"><code><span class="token comment"># 单值缓存</span>
+<span class="token operator">&gt;</span> SET key value
+<span class="token operator">&gt;</span> GET key
+
+<span class="token comment"># 对象缓存</span>
+<span class="token operator">&gt;</span> SET user:1 value<span class="token punctuation">(</span>json格式数据<span class="token punctuation">)</span>
+<span class="token operator">&gt;</span> MSET user:1:name sleepyocean user:1:balance <span class="token number">1888</span>
+<span class="token operator">&gt;</span> MGET user:1:name user:1:balance
+
+<span class="token comment"># 分布式锁</span>
+线程1： <span class="token operator">&gt;</span> SETNX product:10001 <span class="token boolean">true</span>		// 返回1代表获取锁成功
+线程2： <span class="token operator">&gt;</span> SETNX product:10001			// 返回0代表获取锁失败
+<span class="token punctuation">..</span>. <span class="token punctuation">..</span>. 执行业务操作
+<span class="token operator">&gt;</span> DEL product:10001					// 执行完业务释放锁
+
+<span class="token operator">&gt;</span> SET product:10001 <span class="token boolean">true</span> ex <span class="token number">10</span> nx	// 防止程序意外终止导致死锁
+
+<span class="token comment"># 计数器</span>
+<span class="token operator">&gt;</span> INCR article:readcount:<span class="token punctuation">{</span>文章ID<span class="token punctuation">}</span>
+<span class="token operator">&gt;</span> GET article:readcount:<span class="token punctuation">{</span>文章ID<span class="token punctuation">}</span>
+
+<span class="token comment"># 分布式系统全局序列号</span>
+<span class="token operator">&gt;</span> INCRBY orderId <span class="token number">1000</span>		// redis批量生产序列号，提升性能
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><p><strong>list类型的应用场景</strong></p> <p>使用List的数据结构，可以<strong>做简单的消息队列的功能</strong>。另外还有一个就是，可以利用lrange命令，<strong>做基于redis的分页功能</strong>，性能极佳，用户体验好。</p> <p><strong>hash类型的应用场景</strong></p> <p>这里value存放的是结构化的对象，比较方便的就是操作其中的某个字段。</p> <p><strong>set类型的应用场景</strong></p> <p>因为set堆放的是一堆不重复值的集合。所以可以做<strong>全局去重的功能</strong>。利用交集、并集、差集等操作，可以计算共同value，全部的value，自己独有的value等功能。</p> <p><strong>zset类型的应用场景</strong></p> <p>sorted set多了一个权重参数score，集合中的元素能够按score进行排列。可以做<strong>排行榜应用</strong>、<strong>取TOP-n操作</strong>、<strong>延时任务</strong>和<strong>范围查找</strong>。</p> <h3 id="_2-基础操作"><a href="#_2-基础操作" class="header-anchor">#</a> 2）基础操作</h3> <p>1）docker搭建redis环境，参见我的另篇博文：<a href="https://sleepyocean.github.io/pages/f51e12/#_3-redis" target="_blank" rel="noopener noreferrer">docker搭建基础中间件<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>2）进入redis-cli</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code>$ <span class="token function">docker</span> <span class="token builtin class-name">exec</span> -it redis redis-cli
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p>3）练习开始，输入操作指令</p> <p><strong>string</strong></p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># set {key} {value}。设定key持有指定的字符串value，如果该key存在则进行覆盖操作,总是返回OK。</span>
+<span class="token operator">&gt;</span> <span class="token builtin class-name">set</span> name sleepy
+OK
+
+<span class="token comment"># get {key}。获取key的value。如果与该key关联的value不是String类型，redis将返回错误信息，因为get命令只能用于获取String value；如果该key不存在，返回null。</span>
+<span class="token operator">&gt;</span> get name
+<span class="token string">&quot;sleepy&quot;</span>
+
+<span class="token comment"># getset {key} {value}。先获取该key的值，然后在设置该key的值。</span>
+<span class="token operator">&gt;</span> getset name ocean
+<span class="token string">&quot;sleepy&quot;</span>
+<span class="token operator">&gt;</span> get name
+<span class="token string">&quot;ocean&quot;</span>
+
+<span class="token comment"># incr {key}。将指定的key的value原子性的递增1. 如果该key不存在，其初始值为0，在incr之后其值为1。如果value的值不能转成整型，如hello，该操作将执行失败并返回相应的错误信息</span>
+<span class="token operator">&gt;</span> incr age
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+
+<span class="token comment"># decr {key}。将指定的key的value原子性的递减1.如果该key不存在，其初始值为0，在incr之后其值为-1。如果value的值不能转成整型，如hello，该操作将执    行失败并返回相应的错误信息。</span>
+<span class="token operator">&gt;</span> decr age
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">0</span>
+
+<span class="token comment"># incrby {key} {increment}。将指定的key的value原子性增加increment，如果该key不存在，器初始值为0，在incrby之后，该值为increment。如果该值不能转成    整型，如hello则失败并返回错误信息</span>
+<span class="token operator">&gt;</span> incrby price <span class="token number">10</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">10</span>
+
+<span class="token comment"># decrby {key} {decrement}。将指定的key的value原子性减少decrement，如果该key不存在，器初始值为0，在decrby之后，该值为decrement。如果该值不能    转成整型，如hello则失败并返回错误信息</span>
+<span class="token operator">&gt;</span> decrby price <span class="token number">8</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">2</span>
+
+<span class="token comment"># append {key} {value}。如果该key存在，则在原有的value后追加该值；如果该key    不存在，则重新创建一个key/value</span>
+<span class="token operator">&gt;</span> append name ,sleepy
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">12</span>
+<span class="token operator">&gt;</span> get name
+<span class="token string">&quot;ocean,sleepy&quot;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br></div></div><p><strong>list</strong></p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># lpush {key} {value1} {value2}...。在指定的key所关联的list的头部插入所有的values，如果该key不存在，该命令在插入的之前创建一个与该key关联的空链表，之后再向该链表的头部插入数据。插入成功，返回元素的个数。</span>
+<span class="token operator">&gt;</span> lpush <span class="token function">date</span> date3 date2 date1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+
+<span class="token comment"># rpush {key} {value1} {value2}...。在该list的尾部添加元素。</span>
+<span class="token operator">&gt;</span> rpush <span class="token function">date</span> date4 date5 date6
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">6</span>
+
+<span class="token comment"># lrange {key} {start} {end}。获取链表中从start到end的元素的值，start、end可为负数，若为-1则表示链表尾部的元素，-2则表示倒数第二个，依次类推… </span>
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">5</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;date3&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;date6&quot;</span>
+
+<span class="token comment"># lpushx {key} {value}。仅当参数中指定的key存在时（如果与key管理的list中没有值时，则该key是不存在的）在指定的key所关联的list的头部插入value。</span>
+<span class="token operator">&gt;</span> lpushx <span class="token function">date</span> date0
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">7</span>
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">6</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date0&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date3&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+<span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;date6&quot;</span>
+
+<span class="token comment"># rpushx {key} {value}。在该list的尾部添加元素。</span>
+<span class="token operator">&gt;</span> rpushx <span class="token function">date</span> date7
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">8</span>
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">7</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date0&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date3&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+<span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;date6&quot;</span>
+<span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;date7&quot;</span>
+
+<span class="token comment"># lpop {key}。返回并弹出指定的key关联的链表中的第一个元素，即头部元素。</span>
+<span class="token operator">&gt;</span> lpop <span class="token function">date</span>
+<span class="token string">&quot;date0&quot;</span>
+
+<span class="token comment"># rpop {key}。从尾部弹出元素。</span>
+<span class="token operator">&gt;</span> rpop <span class="token function">date</span>
+<span class="token string">&quot;date7&quot;</span>
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">7</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;date3&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;date6&quot;</span>
+
+<span class="token comment"># rpoplpush {resource} {destination}。将「resource」链表中的尾部元素弹出并添加另一个key「destination」的头部。</span>
+<span class="token operator">&gt;</span> rpoplpush <span class="token function">date</span> redate
+<span class="token string">&quot;date6&quot;</span>
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">7</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;date3&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+<span class="token operator">&gt;</span> lrange redate <span class="token number">0</span> <span class="token number">7</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date6&quot;</span>
+
+<span class="token comment"># llen {key}。返回指定的key关联的链表中的元素的数量。</span>
+<span class="token operator">&gt;</span> llen <span class="token function">date</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">5</span>
+
+<span class="token comment"># lset {key} {index} {value}。设置链表中的index的脚标的元素值，0代表链表的头元素，-1代表链表的尾元素。</span>
+<span class="token operator">&gt;</span> lset <span class="token function">date</span> <span class="token number">2</span> datenew2
+OK
+<span class="token operator">&gt;</span> lrange <span class="token function">date</span> <span class="token number">0</span> <span class="token number">7</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;date2&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;datenew2&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;date4&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;date5&quot;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br></div></div><p><strong>hash</strong></p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># hset {key} {field1} {value1} {field2} {value2} ... ...</span>
+<span class="token comment"># 或 hmset {key} {field1} {value1} {field2} {value2} ... ...。为指定的key设定一个或多个field/value对</span>
+<span class="token operator">&gt;</span> hset person name oasis age <span class="token number">23</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">2</span>
+
+<span class="token comment"># hget {key} {field}。返回指定的key中的field的值</span>
+<span class="token operator">&gt;</span> hget person name
+<span class="token string">&quot;oasis&quot;</span>
+
+<span class="token comment"># hmget {key} {field}。取key中的多个field值</span>
+<span class="token operator">&gt;</span> hmget person name age
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;oasis&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;23&quot;</span>
+
+<span class="token comment"># hkeys {key}。获取所有的key</span>
+<span class="token operator">&gt;</span> hkeys person
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+
+<span class="token comment"># hvals {key}。获取所有的value</span>
+<span class="token operator">&gt;</span> hvals person
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;oasis&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;23&quot;</span>
+
+<span class="token comment"># hgetall {key}。获取key中的所有field 中的所有field-value</span>
+<span class="token operator">&gt;</span> hgetall person
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;oasis&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;23&quot;</span>
+
+<span class="token comment"># hdel {key} {field1} {field2} ...。可以删除一个或多个字段，返回是被删除的字段个数</span>
+<span class="token operator">&gt;</span> hdel person age
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">2</span>
+<span class="token operator">&gt;</span> hgetall person
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;oasis&quot;</span>
+
+<span class="token comment"># del key。删除整个list</span>
+<span class="token operator">&gt;</span> del person
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> hgetall person
+<span class="token punctuation">(</span>empty array<span class="token punctuation">)</span>
+
+<span class="token comment"># hincrby {key} {field} {increment}。设置key中field的值增加increment，如: age增加20</span>
+<span class="token operator">&gt;</span> hincrby person age <span class="token number">20</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">20</span>
+<span class="token operator">&gt;</span> hgetall person
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;20&quot;</span>
+
+<span class="token comment"># hexists {key} {field}。判断指定的key中的field是否存在</span>
+<span class="token operator">&gt;</span> hexists person age
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> hexists person name
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">0</span>
+
+<span class="token comment"># hlen {key}。获取key所包含的field的数量</span>
+<span class="token operator">&gt;</span> hlen person
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br></div></div><p><strong>set</strong></p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># sadd {key} {value1} {value2} ...</span>
+<span class="token operator">&gt;</span> sadd lang java c cpp python c
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">4</span>
+
+<span class="token comment"># smembers {key}</span>
+<span class="token operator">&gt;</span> smembers lang
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;cpp&quot;</span>
+
+<span class="token comment"># srem {key} {member1} {member2} ...</span>
+<span class="token operator">&gt;</span> srem lang c
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> smembers lang
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;cpp&quot;</span>
+
+<span class="token comment"># sismember {key} {member}。判断参数中指定的成员是否在该set中，1表示存在，0表示不存在或者该key本身就不存在(无论集合中有多少元素都可以极速的返回结果)</span>
+<span class="token operator">&gt;</span> sismember lang java
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+
+
+<span class="token comment"># 集合运算</span>
+<span class="token operator">&gt;</span> sadd lang1 java c cpp python c
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">4</span>
+<span class="token operator">&gt;</span> sadd lang2 js html python
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+<span class="token comment"># 差集运算</span>
+<span class="token operator">&gt;</span> <span class="token function">sdiff</span> lang1 lang2
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;cpp&quot;</span>
+<span class="token comment"># 交集运算</span>
+<span class="token operator">&gt;</span> sinter lang1 lang2
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token comment"># 并集运算</span>
+<span class="token operator">&gt;</span> sunion lang1 lang2
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;cpp&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;html&quot;</span>
+<span class="token comment"># xxx-store {destination} {key1} {key2} ...。将集合运算存储到「destination」集合中</span>
+<span class="token operator">&gt;</span> sdiffstore sdifflang lang1 lang2
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+<span class="token operator">&gt;</span> sinterstore sinterlang lang1 lang2
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> sunionstore sunionlang lang1 lang2
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">6</span>
+
+<span class="token comment"># scard {key}。获取set中的成员数量</span>
+<span class="token operator">&gt;</span> scard lang1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">4</span>
+
+<span class="token comment"># srandmember {key} {count}。随机返回set中的「count」个成员</span>
+<span class="token operator">&gt;</span> srandmember lang1 <span class="token number">2</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br></div></div><p><strong>zset</strong></p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># zadd {key} {score1} {member1} {socre2} {member2} ... ...。将所有成员以及该成员的分数存放到sorted-set中。如果该元素已经存在则会用新的分数替换原有的分数。返回值是新加入到集合中的元素个数。(根据分数升序排列)</span>
+<span class="token operator">&gt;</span> zadd toplang <span class="token number">3</span> c++ <span class="token number">4</span> golang <span class="token number">5</span> js <span class="token number">6</span> html <span class="token number">7</span> css <span class="token number">10</span> java <span class="token number">9</span> c <span class="token number">8</span> python <span class="token number">12</span> php
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">9</span>
+
+<span class="token comment"># zrange {key} {start} {stop} [withsocres]。获取集合中角标为start-end的成员，[withscore]参数表明返回的成员包含其分数。</span>
+<span class="token operator">&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c++&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;golang&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;html&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;css&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;php&quot;</span>
+
+<span class="token comment"># zscore {key} {member}。返回指定成员的分数</span>
+<span class="token operator">&gt;</span> zscore toplang python
+<span class="token string">&quot;8&quot;</span>
+
+<span class="token comment"># zcard {key}</span>
+<span class="token operator">&gt;</span> zcard toplang
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+
+<span class="token comment"># zrem {key} {member1} {member2} ...</span>
+<span class="token operator">&gt;</span> zrem toplang php
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> zcard toplang
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">8</span>
+
+<span class="token comment"># zrangebysocre {key} {min} {max} [withscores] [limit {offset} {count}]。返回分数在[min,max]的成员并按照分数从低到高排序。[withscore]：显示分数；[limit offset count]；offset，表明从脚标为offset的元素开始并返回count个成员</span>
+<span class="token operator">&gt;</span> zrangebyscore toplang <span class="token number">5</span> <span class="token number">10</span> withscores limit <span class="token number">2</span> <span class="token number">3</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;css&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;7&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;8&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;9&quot;</span>
+
+<span class="token comment"># zincrby {key} {increment} {member}。设置指定成员的增加分数。返回值是修改后的分数</span>
+<span class="token operator">&gt;</span> zincrby toplang <span class="token number">3</span> python
+<span class="token string">&quot;11&quot;</span>
+
+<span class="token operator">&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span> withscores
+ <span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c++&quot;</span>
+ <span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;3&quot;</span>
+ <span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;golang&quot;</span>
+ <span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;4&quot;</span>
+ <span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+ <span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;5&quot;</span>
+ <span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;html&quot;</span>
+ <span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;6&quot;</span>
+ <span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;css&quot;</span>
+<span class="token number">10</span><span class="token punctuation">)</span> <span class="token string">&quot;7&quot;</span>
+<span class="token number">11</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">12</span><span class="token punctuation">)</span> <span class="token string">&quot;9&quot;</span>
+<span class="token number">13</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">14</span><span class="token punctuation">)</span> <span class="token string">&quot;10&quot;</span>
+<span class="token number">15</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">16</span><span class="token punctuation">)</span> <span class="token string">&quot;11&quot;</span>
+
+<span class="token comment"># zcount {key} {min} {max}。获取分数在[min，max]之间的成员个数</span>
+<span class="token operator">&gt;</span> zcount toplang <span class="token number">3</span> <span class="token number">6</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">4</span>
+
+<span class="token comment"># zrank {key} {member}。返回成员在集合中的排名(从小到大，从0开始)</span>
+<span class="token operator">&gt;</span> zrank toplang js
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">2</span>
+
+<span class="token comment"># zrevrank {key} {member}。返回成员在集合中的排名(从大到小，从0开始)</span>
+<span class="token operator">&gt;</span> zrevrank toplang java
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+
+<span class="token operator">&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c++&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;golang&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;html&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;css&quot;</span>
+<span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;c&quot;</span>
+<span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;pyhton&quot;</span>
+
+<span class="token comment"># zremrangebyrank {key} {start} {stop}。按照排名范围删除元素</span>
+<span class="token operator">&gt;</span> zremrangebyrank toplang <span class="token number">3</span> <span class="token number">5</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+<span class="token operator">&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span>
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c++&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;golang&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+
+<span class="token operator">&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span> withscores
+ <span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;c++&quot;</span>
+ <span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;3&quot;</span>
+ <span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;golang&quot;</span>
+ <span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;4&quot;</span>
+ <span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;js&quot;</span>
+ <span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;5&quot;</span>
+ <span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+ <span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;10&quot;</span>
+ <span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">10</span><span class="token punctuation">)</span> <span class="token string">&quot;11&quot;</span>
+
+<span class="token comment"># zremrangebyscore {key} {min} {max}。按照分数范围删除元素</span>
+<span class="token operator">&gt;</span> zremrangebyscore toplang <span class="token number">3</span> <span class="token number">5</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">3</span>
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> zrange toplang <span class="token number">0</span> <span class="token number">10</span> withscores
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;java&quot;</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;10&quot;</span>
+<span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;python&quot;</span>
+<span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;11&quot;</span>
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br></div></div><h3 id="_3-通用操作"><a href="#_3-通用操作" class="header-anchor">#</a> 3）通用操作</h3> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># keys {pattern}。获取所有与pattern匹配的key ，返回所有与该key匹配的keys。 *表示任意一个或者多个字符， ?表示任意一个字符</span>
+<span class="token operator">&gt;</span> keys *
+ <span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;date1&quot;</span>
+ <span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;person&quot;</span>
+ <span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+ <span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;price&quot;</span>
+ <span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;toplang&quot;</span>
+ <span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;lang2&quot;</span>
+ <span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;1&quot;</span>
+ <span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;0&quot;</span>
+ <span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;redate&quot;</span>
+<span class="token number">10</span><span class="token punctuation">)</span> <span class="token string">&quot;sunionlang&quot;</span>
+<span class="token number">11</span><span class="token punctuation">)</span> <span class="token string">&quot;sdifflang&quot;</span>
+<span class="token number">12</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+<span class="token number">13</span><span class="token punctuation">)</span> <span class="token string">&quot;lang1&quot;</span>
+<span class="token number">14</span><span class="token punctuation">)</span> <span class="token string">&quot;lang&quot;</span>
+<span class="token number">15</span><span class="token punctuation">)</span> <span class="token string">&quot;date&quot;</span>
+<span class="token number">16</span><span class="token punctuation">)</span> <span class="token string">&quot;sinterlang&quot;</span>
+
+<span class="token comment"># del {key1} {key2} ...</span>
+<span class="token operator">&gt;</span> del date1 lang1 lang2 sunionlang sinterlang sdifflang
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">6</span>
+<span class="token operator">&gt;</span> keys *
+ <span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;person&quot;</span>
+ <span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+ <span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;price&quot;</span>
+ <span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;toplang&quot;</span>
+ <span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;1&quot;</span>
+ <span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;0&quot;</span>
+ <span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;redate&quot;</span>
+ <span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+ <span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;lang&quot;</span>
+<span class="token number">10</span><span class="token punctuation">)</span> <span class="token string">&quot;date&quot;</span>
+
+<span class="token comment"># exists {key}。判断该key是否存在，1代表存在，0代表不存在</span>
+<span class="token operator">&gt;</span> exists date1
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">0</span>
+
+<span class="token comment"># rename {key} {newkey}</span>
+<span class="token operator">&gt;</span> <span class="token function">rename</span> person <span class="token function">man</span>
+OK
+<span class="token operator">&gt;</span> keys *
+ <span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">&quot;age&quot;</span>
+ <span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">&quot;price&quot;</span>
+ <span class="token number">3</span><span class="token punctuation">)</span> <span class="token string">&quot;toplang&quot;</span>
+ <span class="token number">4</span><span class="token punctuation">)</span> <span class="token string">&quot;1&quot;</span>
+ <span class="token number">5</span><span class="token punctuation">)</span> <span class="token string">&quot;0&quot;</span>
+ <span class="token number">6</span><span class="token punctuation">)</span> <span class="token string">&quot;redate&quot;</span>
+ <span class="token number">7</span><span class="token punctuation">)</span> <span class="token string">&quot;name&quot;</span>
+ <span class="token number">8</span><span class="token punctuation">)</span> <span class="token string">&quot;lang&quot;</span>
+ <span class="token number">9</span><span class="token punctuation">)</span> <span class="token string">&quot;date&quot;</span>
+<span class="token number">10</span><span class="token punctuation">)</span> <span class="token string">&quot;man&quot;</span>
+
+<span class="token operator">&gt;</span> expire redate <span class="token number">10</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> exists redate
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token comment"># 10s 以后再次查询</span>
+<span class="token operator">&gt;</span> exists redate
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">0</span>
+
+<span class="token comment"># ttl {key}。获取该key所剩的超时时间，如果没有设置超时，返回-1，如果返回-2表示超时不存在</span>
+<span class="token operator">&gt;</span> ttl <span class="token function">man</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> -1
+<span class="token operator">&gt;</span> ttl redate
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> -2
+<span class="token operator">&gt;</span> expire <span class="token function">date</span> <span class="token number">300</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">1</span>
+<span class="token operator">&gt;</span> ttl <span class="token function">date</span>
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">286</span>
+
+<span class="token comment"># persist {key}。持久化key</span>
+
+<span class="token comment"># type {key}。获取指定key的类型。该命令将以字符串的格式返回。返回的字符串为string 、list 、set 、hash 和 zset，如果key不存在返回none。</span>
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> name
+string
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> <span class="token function">date</span>
+list
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> <span class="token function">man</span>
+<span class="token builtin class-name">hash</span>
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> lang
+<span class="token builtin class-name">set</span>
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> toplang
+zset
+<span class="token operator">&gt;</span> <span class="token builtin class-name">type</span> redate
+none
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br></div></div><p><strong>其他命令补充</strong>：</p> <ul><li><strong>select 编号</strong>：切换数据库（redis默认有16个数据库，默认使用第0个）</li> <li><strong>dbsize</strong>：查看当前数据库存储数据的大小</li> <li><strong>flushdb</strong>：清空当前数据库</li> <li><strong>flushall</strong>：清空所有的数据库</li></ul> <h3 id="_4-三大特殊数据类型"><a href="#_4-三大特殊数据类型" class="header-anchor">#</a> 4）三大特殊数据类型</h3> <p><strong>a）geospatial（地理位置）</strong></p> <p>把某个具体的位置信息（经度，纬度，名称）添加到指定的key中，数据将会用一个sorted set存储，以便稍后能使用 <a href="https://redis.io/commands/georadius" target="_blank" rel="noopener noreferrer">GEORADIUS<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>和 <a href="https://redis.io/commands/georadiusbymember" target="_blank" rel="noopener noreferrer">GEORADIUSBYMEMBER<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>命令来根据半径来查询位置信息。</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># 规则：两极无法直接添加，一般会下载城市数据，通过java程序一次性导入</span>
+
+<span class="token comment"># 添加城市的经度和纬度</span>
+<span class="token operator">&gt;</span> geoadd  china:city <span class="token number">121.47</span> <span class="token number">31.23</span>   shanghai
+
+<span class="token comment"># 获取指定城市的经度和纬度</span>
+<span class="token operator">&gt;</span> geopos china:city beijin
+
+<span class="token comment"># 获取城市之间的距离（单位： m米、km千米、mi英里、ft英尺）</span>
+<span class="token operator">&gt;</span> geodist china:city beijin shanghai km
+
+<span class="token comment"># 查找当前经纬度下，半径1000km的城市</span>
+<span class="token operator">&gt;</span> georadius china:city  <span class="token number">110.00</span> <span class="token number">30.00</span>  1000km
+<span class="token comment"># 查找当前经纬度下，半径1000km的城市和直线距离</span>
+<span class="token operator">&gt;</span> georadius china:city  <span class="token number">110.00</span> <span class="token number">30.00</span>  1000km  withdist
+<span class="token comment"># 查找当前经纬度下，半径1000km的城市经纬度</span>
+<span class="token operator">&gt;</span> georadius china:city  <span class="token number">110.00</span> <span class="token number">30.00</span>  1000km  withcoord
+
+<span class="token comment"># 找出指定城市1000km附近的城市</span>
+<span class="token operator">&gt;</span> georadiusbymember china:city beijin 1000km
+
+<span class="token comment"># 返回一个或多个位置的geohash</span>
+<span class="token operator">&gt;</span> geohash china:city beijin chongqin
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br></div></div><p><strong>使用场景</strong>：地图</p> <p><em>Redis.Version &gt;= 3.2</em></p> <p><strong>b）hyperloglog</strong></p> <p>Redis HyperLogLog 是用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定的、并且是很小的。</p> <p>在 Redis 里面，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2^64 个不同元素的基 数。这和计算基数时，元素越多耗费内存就越多的集合形成鲜明对比。</p> <p>但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLogLog 不能像集合那样，返回输入的各个元素。</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># 创建一组元素</span>
+<span class="token operator">&gt;</span> pfadd mykey a b c
+
+<span class="token comment"># 统计mykey元素的基数数量</span>
+<span class="token operator">&gt;</span> pfcount mykey     
+
+<span class="token comment"># 合并mykey1和mykey2到mykey3</span>
+<span class="token operator">&gt;</span> pf merge  mykey3 mykey1 mykey2   
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><p><strong>使用场景</strong>：统计一个网站的访问人数</p> <p><em>Redis.Version &gt;= 2.8.9</em></p> <p><strong>c）bitmap（位图）</strong></p> <p>bitmap就是通过最小的单位bit来进行0或者1的设置，表示某个元素对应的值或者状态。</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment"># 设置值</span>
+<span class="token operator">&gt;</span> setbit  sign  <span class="token number">1</span>  <span class="token number">0</span>  
+
+<span class="token comment"># 取值</span>
+<span class="token operator">&gt;</span> getbit sign   <span class="token number">1</span> 
+
+<span class="token comment"># 统计这周的打卡记录</span>
+<span class="token operator">&gt;</span> bitcount sign   
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><p><strong>使用场景</strong>：统计打卡，考勤</p> <p><em>Redis.Version &gt;= 2.2.0</em></p> <h2 id="二、redis特性"><a href="#二、redis特性" class="header-anchor">#</a> 二、Redis特性</h2> <h3 id="_1-淘汰策略"><a href="#_1-淘汰策略" class="header-anchor">#</a> 1）淘汰策略</h3> <p><img src="https://gallery.sleepyocean.cn/resource/img/9e7197a852e19f2e5af528d916e17ea3" alt="博文 - redis"></p> <p><strong>补充</strong>：Redis 4.0 加入了 LFU（least frequency use）淘汰策略，包括 volatile-lfu 和 allkeys-lfu，通过统计访问频率，将访问频率最少，即最不经常使用的 KV 淘汰。</p> <h3 id="_2-事务"><a href="#_2-事务" class="header-anchor">#</a> 2）事务</h3> <p><strong>redis事务的本质</strong>：一组命令的集合，一个事务中所有的命令都会被序列化，在事务执行的过程中，会按照顺序执行</p> <p>redis中的事务具有一致性、顺序性、排他性</p> <p>redis单条命令保持原子性，但是事务不保证原子性</p> <p>redis中没有隔离级别的概念</p> <p>开启事务后，所有的命令在事务中并没有被执行，只有在发起执行命令的时候才会执行</p> <p><strong>redis事务步骤</strong>：</p> <ul><li>开启事务（multi）</li> <li>命令入队</li> <li>执行事务(exec)</li> <li>取消事务（discard）</li></ul> <p>注意：事务执行的过程中可能存在异常</p> <ul><li>编译时异常（命令有错），事务中所有的命令都不会被执行</li> <li>运行时异常，如果事务队列中存在语法性，那么执行命令的时候，其他命令可以正常执行</li></ul> <h3 id="_3-持久化"><a href="#_3-持久化" class="header-anchor">#</a> 3）持久化</h3> <p>三种持久化方式： <strong>RDB持久化</strong>、<strong>AOF持久化</strong>和<strong>RDB-AOF混合持久化</strong></p> <ul><li><strong>RDB（快照持久化）</strong>：快照形式是直接把内存中的数据保存到一个 dump 的文件中，定时保存，保存策略。</li></ul> <p>redis.conf的配置示例：</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code><span class="token comment">#在900s内如果有1条数据被写入，则产生一次快照。</span>
+save <span class="token number">900</span> <span class="token number">1</span> 
+<span class="token comment">#在300s内如果有10条数据被写入，则产生一次快照</span>
+save <span class="token number">300</span> <span class="token number">10</span> 
+<span class="token comment">#在60s内如果有10000条数据被写入，则产生一次快照</span>
+save <span class="token number">60</span> <span class="token number">10000</span> 
+
+<span class="token comment"># stop-writes-on-bgsave-error 如果为yes则表示，当备份进程出错的时候，主进程就停止进行接受新的写入操作，这样是为了保护持久化的数据一致性的问题。</span>
+stop-writes-on-bgsave-error <span class="token function">yes</span> 
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div><p>RDB 持久化方式的优点：全量数据快照，文件小，恢复快</p> <p>RDB 持久化方式的缺点：无法保存最近一次快照之后的数据。内存数据全量同步，数据量大的状况下，会由于 I/O 而严重影响性能。</p> <ul><li><strong>AOF持久化</strong>：把所有的对 Redis 的服务器进行修改的命令都存到一个文件里，命令的集合。</li></ul> <p>redis.conf的配置示例：</p> <div class="language-bash line-numbers-mode"><pre class="language-bash"><code>appendonly <span class="token function">yes</span>
+
+<span class="token comment"># appendfsync no </span>
+<span class="token comment"># appendsync always 每次有数据修改发生时都会写入AOF文件。</span>
+<span class="token comment"># appendfsync everysec 每秒钟同步一次，该策略为AOF的缺省策略。</span>
+appendfsync everysec
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>AOF 持久化方式的优点：可读性高，适合保存增量数据，数据不易丢失。</p> <p>AOF 持久化方式的缺点：文件体积大，恢复时间长。</p> <ul><li><strong>RDB-AOF 混合持久化方式</strong>：持久化策略首先将缓存中数据以 RDB 方式全量写入文件，再将写入后新增的数据以 AOF 的方式追加在 RDB 数据的后面，在下一次做 RDB 持久化的时候将 AOF 的数据重新以 RDB 的形式写入文件。</li></ul> <h3 id="_3-redis高性能的原因"><a href="#_3-redis高性能的原因" class="header-anchor">#</a> 3）Redis高性能的原因</h3> <ul><li>Redis 完全基于内存，绝大部分请求是纯粹的内存操作，非常迅速，数据存在内存中，类似于 HashMap，HashMap 的优势就是查找和操作的时间复杂度是 O(1)。</li> <li>数据结构简单，对数据操作也简单。</li> <li>采用单线程，避免了不必要的上下文切换和竞争条件，不存在多线程导致的 CPU 切换，不用去考虑各种锁的问题，不存在加锁释放锁操作，没有死锁问题导致的性能消耗。</li> <li>使用多路复用 IO 模型，非阻塞 IO。</li></ul> <h3 id="_4-redis缓存相关问题"><a href="#_4-redis缓存相关问题" class="header-anchor">#</a> 4）Redis缓存相关问题</h3> <ul><li><strong>缓存穿透（查不到数据）</strong> <ul><li>现象解释：缓存穿透是指，用户想要查询一个数据，发现redis内存数据库中没有，也就是缓存没有命中，于是向持久层数据库查询。发现也没有，于是本次查询失败。当用户很多的时候，缓存都没有命中，于是都去请求持久层数据库，这会给持久层数据库造成很大的压力，这时候就相当于出现了缓存穿透</li> <li>解决方案：
+<ul><li>布隆过滤器：布隆过滤器是一种数据结构，对所有可能查询的参数以hash形式存储，在控制层先进行校验，不符合则丢弃，从而避免了对底层存储系统的查询压力</li> <li>缓存空对象：当存储层不命中后，即使返回的空对象也将其缓存起来，同时设置一个过期时间，之后再访问这个数据会从缓存中获取，保护了后端的数据源（潜在问题：空值缓存过多）</li></ul></li></ul></li> <li><strong>缓存击穿（热点数据过期）</strong> <ul><li>现象解释：缓存击穿，是指一个key非常的热点，在不停的扛着大并发，大并发集中对这一个点进行访问，当这个key在失效的瞬间，持续的大并发就穿破缓存，直接请求在数据库上，就像在屏障上面开了一个洞。当某个key在过期的瞬间，有大量的请求并发访问，这类数据一般是热点数据，由于缓存过期，会同时访问数据库来查询最新的数据，并且写缓存会导致数据库瞬间压力过大</li> <li>解决方案：
+<ul><li>设置热点数据永不过期：从缓存层面来看，没有设置过期时间，就不会产生这个问题</li> <li>加互斥锁：分布式锁，使用分布式锁，保证对于每个Key同时只有一个线程去查询后端服务，其他线程没有获得分布式锁的权限，因此需要等待。这种方式将高并发的压力转移到了分布式锁，因此对分布式锁的考验很大</li></ul></li></ul></li> <li><strong>缓存雪崩（热点数据集中过期）</strong> <ul><li>现象解释：缓存雪崩，是指在某一个时间段，缓存集中过期失效，redis宕机产生一系列的连锁反应，造成整个系统崩溃</li></ul></li> <li><strong>缓存预热</strong> <ul><li>现象解释：缓存预热就是系统上线后，将相关的缓存数据直接加载到缓存系统。这样就可以避免在用户请求的时候，先查询数据库，然后再将数据缓存的问题！用户直接查询事先被预热的缓存数据！</li> <li>解决方案：
+<ul><li>直接写个缓存刷新页面，上线时手工操作下</li> <li>数据量不大，可以在项目启动的时候自动进行加载</li> <li>定时刷新缓存</li></ul></li></ul></li> <li><strong>缓存降级</strong> <ul><li>现象解释：当访问量剧增、服务出现问题（如响应时间慢或不响应）或非核心服务影响到核心流程的性能时，仍然需要保证服务还是可用的，即使是有损服务。系统可以根据一些关键数据进行自动降级，也可以配置开关实现人工降级。服务降级的目的，是为了防止Redis服务故障，导致数据库跟着一起发生雪崩问题。因此，对于不重要的缓存数据，可以采取服务降级策略，例如一个比较常见的做法就是，Redis出现问题，不去数据库查询，而是直接返回默认值给用户</li> <li>解决方案：降级的最终目的是保证核心服务可用，即使是有损的。而且有些服务是无法降级的（如加入购物车、结算）。这里以参考日志级别设置预案
+<ul><li>一般：比如有些服务偶尔因为网络抖动或者服务正在上线而超时，可以自动降级</li> <li>警告：有些服务在一段时间内成功率有波动（如在95~100%之间），可以自动降级或人工降级，并发送告警</li> <li>错误：比如可用率低于90%，或者数据库连接池被打爆了，或者访问量突然猛增到系统能承受的最大阀值，此时可以根据情况自动降级或者人工降级</li> <li>严重错误：比如因为特殊原因数据错误了，此时需要紧急人工降级</li></ul></li></ul></li></ul> <h2 id="四、redis集群架构"><a href="#四、redis集群架构" class="header-anchor">#</a> 四、Redis集群架构</h2> <p>Redis 高可用架构有如下方案：</p> <ul><li>Redis Sentinel 集群 + 内网 DNS + 自定义脚本</li> <li>Redis Sentinel 集群 + VIP + 自定义脚本</li> <li>封装客户端直连 Redis Sentinel 端口。JedisSentinelPool，适合 Java</li> <li>Redis Sentinel 集群 + Keepalived/Haproxy</li> <li>Redis M/S + Keepalived</li> <li>Redis Cluster</li> <li>Twemproxy</li> <li>Codis</li></ul> <p>搭建高可用Redis集群架构实践请参考我的另一篇博文：<a href="">Redis高可用集群搭建</a></p></div></div> <div class="page-edit"><!----> <div class="tags"><a href="/tags/?tag=Redis" title="标签">
+      #Redis
+    </a><a href="/tags/?tag=%E4%B8%AD%E9%97%B4%E4%BB%B6" title="标签">
+      #中间件
+    </a></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">2020/12/08, 06:12:00</span></div></div> <div class="page-nav-wapper"><!----> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/pages/95c6e3/" class="prev">设计模式 - 总览</a></span> <span class="next"><a href="/pages/f61843/">Zookeeper - 分布式协调服务</a>
+        →
+      </span></p></div></div></div> <div class="article-list"><div class="article-title"><a href="/archives/" class="iconfont icon-shizhong">新鲜出炉</a></div> <div class="article-wrapper"><dl><dd>01</dd> <dt><a href="/pages/c2b600/"><div>记录 - 快速搭建自动化部署平台</div></a> <span>04-13</span></dt></dl><dl><dd>02</dd> <dt><a href="/pages/8e0ffe/"><div>Docker搭建各类Paas服务</div></a> <span>03-01</span></dt></dl><dl><dd>03</dd> <dt><a href="/pages/96ee6e/"><div>系统配置 - Android TV配置</div></a> <span>02-12</span></dt></dl> <dl><dd></dd> <dt><a href="/archives/" class="more">更多文章&gt;</a></dt></dl></div></div> </main></div> <div class="footer"><div class="icons"><a href="mailto:captain1920@foxmail.com" title="发邮件" target="_blank" class="iconfont icon-youjian"></a><a href="https://github.com/sleepyocean" title="GitHub" target="_blank" class="iconfont icon-github"></a></div> 
+    Copyright © 2019-2022
+    <span>SleepyOcean | <a href="https://github.com/SleepyOcean" target="_blank">MIT License</a></span></div> <div class="buttons"><div title="返回顶部" class="button blur go-to-top iconfont icon-fanhuidingbu" style="display:none;"></div> <div title="去评论" class="button blur go-to-comment iconfont icon-pinglun" style="display:none;"></div> <div title="主题模式" class="button blur theme-mode-but iconfont icon-zhuti"><ul class="select-box" style="display:none;"><li class="iconfont icon-zidong">
+          跟随系统
+        </li><li class="iconfont icon-rijianmoshi">
+          浅色模式
+        </li><li class="iconfont icon-yejianmoshi">
+          深色模式
+        </li><li class="iconfont icon-yuedu">
+          阅读模式
+        </li></ul></div></div> <!----></div><div class="global-ui"><div></div></div></div>
+    <script src="/assets/js/app.c96e85b8.js" defer></script><script src="/assets/js/2.826e337c.js" defer></script><script src="/assets/js/3.a6e9fd4b.js" defer></script><script src="/assets/js/38.2b3a5988.js" defer></script>
+  </body>
+</html>
