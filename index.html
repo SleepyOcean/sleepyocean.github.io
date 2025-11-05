@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ocean Oasis - Open Source AI Commerce Stack</title>
     <style>
-        /* ===== 全局基础样式 ===== */
+        /* ===== 全局样式 ===== */
         * {
             box-sizing: border-box;
         }
@@ -20,7 +20,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== 顶部导航栏 ===== */
+        /* ===== 导航栏 ===== */
         nav {
             display: flex;
             justify-content: space-between;
@@ -67,7 +67,7 @@
 
         .btn {
             background: #2563eb;
-            color: white !important;
+            color: white;
             padding: 0.6rem 1.4rem;
             border-radius: 8px;
             font-weight: 600;
@@ -79,14 +79,14 @@
             background: #1e40af;
         }
 
-        /* ===== 主体部分 ===== */
+        /* ===== 主体内容 ===== */
         main {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding-top: 20vh;
+            padding-top: 22vh;
             padding-bottom: 10vh;
         }
 
@@ -119,7 +119,53 @@
             margin-top: 2rem;
         }
 
-        /* ===== 毛玻璃背景与光晕 ===== */
+        /* ===== AI输入框区域 ===== */
+        .ai-box {
+            margin-top: 4rem;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ai-input {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            outline: none;
+        }
+
+        .ai-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .ai-tools {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ai-tools span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+
+        /* ===== 光晕背景 ===== */
         .background-glow {
             position: absolute;
             top: -10%;
@@ -147,7 +193,7 @@
 
 <body>
 
-    <!-- 背景光影 -->
+    <!-- 背景光晕 -->
     <div class="background-glow"></div>
     <div class="blur-circle"></div>
 
@@ -175,6 +221,23 @@
         <div class="cta">
             <a href="#" class="btn">Get Started</a>
         </div>
+
+        <!-- AI输入框 -->
+        <div class="ai-box">
+            <input class="ai-input" placeholder="Ask Any Things..." />
+            <div class="ai-toolbar">
+                <div class="ai-tools">
+                    <span>＋</span>
+                    <span>🔍 Search</span>
+                    <span>🎨 Create Image</span>
+                </div>
+                <div class="ai-tools">
+                    <span>🎤</span>
+                    <span>⬆️</span>
+                </div>
+            </div>
+        </div>
+
     </main>
 
 </body>
