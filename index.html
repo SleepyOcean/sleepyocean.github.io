@@ -1,242 +1,435 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ocean Oasis - Open Source AI Commerce Stack</title>
-    <style>
-        /* ===== 全局样式 ===== */
-        * {
-            box-sizing: border-box;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIOCEAN Magazine | Issue 01</title>
 
+    <!-- Fonts: Cormorant Garamond (Art/Poetry) & Space Grotesk (Code/Modern) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'Noto Serif SC', 'serif'],
+                    },
+                    colors: {
+                        'ocean-dark': '#050a12',
+                        'ocean-light': '#f4f4f0',
+                        'accent': '#4f8a8b',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Base styles & Reset for smooth experience */
+        html,
         body {
             margin: 0;
-            font-family: "Inter", "Helvetica Neue", sans-serif;
-            background: linear-gradient(180deg, #f8fbff 0%, #e6f0ff 100%);
-            color: #111827;
-            min-height: 100vh;
+            padding: 0;
+            background-color: #050a12;
+            color: #f4f4f0;
+            cursor: none;
+            /* Hide default cursor */
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ===== 导航栏 ===== */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 5%;
+        /* Custom selection color */
+        ::selection {
+            background-color: #4f8a8b;
+            color: #050a12;
+        }
+
+        /* Noise Overlay for print magazine texture */
+        .noise-overlay {
             position: fixed;
-            width: 100%;
             top: 0;
-            backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            z-index: 10;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .logo {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #2563eb;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #f4f4f0;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
         }
 
-        .logo::before {
-            content: "🌊";
+        .cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(244, 244, 240, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s, border-color 0.3s;
+            transition-timing-function: ease-out;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
+        /* Hover states for cursor */
+        body.hovering .cursor-dot {
+            width: 0;
+            height: 0;
         }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #1e3a8a;
-            font-weight: 500;
-            transition: 0.2s;
+        body.hovering .cursor-ring {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(244, 244, 240, 0.1);
+            border-color: #f4f4f0;
+            backdrop-filter: blur(2px);
         }
 
-        .nav-links a:hover {
-            color: #2563eb;
+        /* Scroll Reveal Animations */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .btn {
-            background: #2563eb;
-            color: white !important;
-            padding: 0.6rem 1.4rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s;
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .btn:hover {
-            background: #1e40af;
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ===== 主体内容 ===== */
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding-top: 22vh;
-            padding-bottom: 10vh;
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        .badge {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 9999px;
-            padding: 0.4rem 1rem;
-            font-size: 0.85rem;
-            color: #2563eb;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            margin-bottom: 1.2rem;
-            backdrop-filter: blur(10px);
+        /* Image hover effect */
+        .image-container {
+            overflow: hidden;
         }
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 0.4rem 0;
-            color: #0f172a;
+        .image-container img {
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        p.desc {
-            color: #475569;
-            font-size: 1.05rem;
-            max-width: 550px;
-            line-height: 1.6;
+        .image-container:hover img {
+            transform: scale(1.05);
         }
 
-        .cta {
-            margin-top: 2rem;
-        }
-
-        /* ===== AI输入框区域 ===== */
-        .ai-box {
-            margin-top: 4rem;
-            width: 80%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .ai-input {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 1rem;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.8);
-            outline: none;
-        }
-
-        .ai-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            color: #475569;
-        }
-
-        .ai-tools {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .ai-tools span {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            cursor: pointer;
-        }
-
-        /* ===== 光晕背景 ===== */
-        .background-glow {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(circle at 50% 50%, rgba(173, 216, 255, 0.6), transparent 70%);
-            z-index: -2;
-            filter: blur(120px);
-        }
-
-        .blur-circle {
-            position: absolute;
-            bottom: -10%;
-            right: 10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.25), transparent 70%);
-            filter: blur(80px);
-            z-index: -2;
+        /* Hide scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
     </style>
 </head>
 
 <body>
+    <div id="root"></div>
 
-    <!-- 背景光晕 -->
-    <div class="background-glow"></div>
-    <div class="blur-circle"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-    <!-- 导航栏 -->
-    <nav>
-        <div class="logo">Ocean Oasis</div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">How It Works</a>
-            <a href="#">Blog</a>
-            <a href="#">Teams</a>
-            <a href="#" class="btn">Get Started</a>
-        </div>
-    </nav>
+        // Custom Cursor Component
+        const Cursor = () => {
+            const dotRef = useRef(null);
+            const ringRef = useRef(null);
 
-    <!-- 主体内容 -->
-    <main>
-        <div class="badge">World’s First Oceanic AI Stack</div>
-        <h1>Open Source AI Commerce Stack</h1>
-        <p class="desc">
-            Ocean Oasis is an open-source platform that enables AI agents to pay autonomously via secure protocols and
-            digital wallets.
-        </p>
+            useEffect(() => {
+                const onMouseMove = (e) => {
+                    if (dotRef.current && ringRef.current) {
+                        dotRef.current.style.left = `${e.clientX}px`;
+                        dotRef.current.style.top = `${e.clientY}px`;
 
-        <!-- AI输入框 -->
-        <div class="ai-box">
-            <input class="ai-input" placeholder="Ask Any Things..." />
-            <div class="ai-toolbar">
-                <div class="ai-tools">
-                    <span>＋</span>
-                    <span>🔍 Search</span>
-                    <span>🎨 Create Image</span>
+                        // slight delay for the ring for a smooth trailing effect
+                        setTimeout(() => {
+                            if (ringRef.current) {
+                                ringRef.current.style.left = `${e.clientX}px`;
+                                ringRef.current.style.top = `${e.clientY}px`;
+                            }
+                        }, 50);
+                    }
+                };
+
+                const onMouseEnter = () => document.body.classList.add('hovering');
+                const onMouseLeave = () => document.body.classList.remove('hovering');
+
+                window.addEventListener('mousemove', onMouseMove);
+
+                // Add hover effect to interactive elements
+                const interactables = document.querySelectorAll('a, button, .interactable');
+                interactables.forEach(el => {
+                    el.addEventListener('mouseenter', onMouseEnter);
+                    el.addEventListener('mouseleave', onMouseLeave);
+                });
+
+                return () => {
+                    window.removeEventListener('mousemove', onMouseMove);
+                    interactables.forEach(el => {
+                        el.removeEventListener('mouseenter', onMouseEnter);
+                        el.removeEventListener('mouseleave', onMouseLeave);
+                    });
+                };
+            }, []);
+
+            return (
+                <React.Fragment>
+                    <div ref={dotRef} className="cursor-dot"></div>
+                    <div ref={ringRef} className="cursor-ring"></div>
+                </React.Fragment>
+            );
+        };
+
+        // Hook for Scroll Reveal
+        const useScrollReveal = () => {
+            useEffect(() => {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.15
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target); // Reveal only once
+                        }
+                    });
+                }, observerOptions);
+
+                const elements = document.querySelectorAll('.reveal-up, .reveal-left');
+                elements.forEach(el => observer.observe(el));
+
+                return () => observer.disconnect();
+            }, []);
+        };
+
+        // Hook for Parallax Effect
+        const useParallax = () => {
+            useEffect(() => {
+                const handleScroll = () => {
+                    const scrolled = window.scrollY;
+                    const parallaxElements = document.querySelectorAll('.parallax');
+
+                    parallaxElements.forEach(el => {
+                        const speed = el.getAttribute('data-speed') || 0.5;
+                        el.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+        };
+
+        const App = () => {
+            useScrollReveal();
+            useParallax();
+
+            return (
+                <div className="relative w-full min-h-screen bg-ocean-dark text-ocean-light font-sans selection:bg-white selection:text-ocean-dark">
+                    <Cursor />
+                    <div className="noise-overlay"></div>
+
+                    {/* Navigation */}
+                    <nav className="fixed top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-50 mix-blend-difference">
+                        <div className="interactable cursor-pointer flex items-center">
+                            {/* Insert your logo image URL in the src attribute below */}
+                            <img src="https://raw.githubusercontent.com/SleepyOcean/sleepyocean.github.io/refs/heads/master/LIOCEAN-Logo_NoName.png" alt="LIOCEAN Logo" className="h-6 md:h-8 w-auto object-contain" />
+                            <span>LIOCEAN Magazine</span>
+                            {/* If the image fails to load, you might want a fallback text, but usually alt text is enough */}
+                        </div>
+                        <div className="text-sm tracking-widest uppercase font-semibold interactable cursor-pointer">
+                            Menu
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+                        {/* Background abstract shape / gradient */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/20 rounded-full blur-[120px] parallax" data-speed="-0.2"></div>
+
+                        <div className="z-10 text-center parallax" data-speed="0.3">
+                            <h2 className="text-xs md:text-sm tracking-[0.3em] uppercase mb-6 opacity-70 font-sans">
+                                Issue 01 &mdash; The Digital Renaissance
+                            </h2>
+                            <h1 className="text-7xl md:text-[9rem] lg:text-[12rem] leading-none font-serif tracking-tighter mix-blend-difference interactable">
+                                LIOCEAN
+                            </h1>
+                            <div className="mt-8 flex items-center justify-center gap-4 text-sm font-sans opacity-60">
+                                <span>Code</span>
+                                <span className="w-8 h-[1px] bg-current"></span>
+                                <span>Design</span>
+                                <span className="w-8 h-[1px] bg-current"></span>
+                                <span>Poetry</span>
+                            </div>
+                        </div>
+
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-50 parallax" data-speed="-0.1">
+                            <span className="text-xs uppercase tracking-widest mb-2 writing-vertical-rl">Scroll</span>
+                            <div className="w-[1px] h-12 bg-white/50 relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-full h-full bg-white animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+                            </div>
+                        </div>
+                        <style>{`
+                            @keyframes scrollLine {
+                                0% { transform: translateY(-100%); }
+                                100% { transform: translateY(100%); }
+                            }
+                        `}</style>
+                    </section>
+
+                    {/* Manifesto Section */}
+                    <section className="min-h-screen flex items-center justify-center px-6 md:px-20 py-24">
+                        <div className="max-w-4xl mx-auto">
+                            <p className="font-serif text-3xl md:text-5xl lg:text-6xl leading-relaxed md:leading-tight reveal-up">
+                                “纸媒或许在衰退，<br />
+                                <span className="italic text-accent">但人们对「美」的感知从未停止。</span><br />
+                                在这个数字时代，<br />
+                                我们用代码作笔，用界面构图，<br />
+                                探索属于未来的阅读形态。”
+                            </p>
+                            <div className="mt-16 flex items-center gap-6 reveal-up" style={{ transitionDelay: '0.2s' }}>
+                                <div className="w-12 h-[1px] bg-accent"></div>
+                                <p className="font-sans text-sm tracking-widest uppercase text-accent">Manifesto / 创刊宣言</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Editorial Gallery Section */}
+                    <section className="py-24 px-6 md:px-12 w-full bg-[#0a111a]">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-col md:flex-row gap-12 lg:gap-24 items-center">
+                                {/* Left Content */}
+                                <div className="w-full md:w-5/12 reveal-up">
+                                    <h3 className="font-sans text-xs tracking-widest uppercase mb-4 opacity-60">Chapter 01</h3>
+                                    <h2 className="font-serif text-4xl md:text-6xl mb-8">算法<br />与感性的交汇</h2>
+                                    <p className="font-sans text-sm md:text-base leading-loose opacity-80 mb-8">
+                                        传统的网格布局正在被打破。WebGL、视差动效、生成式艺术... 我们将这些曾经冰冷的技术名词，重新编排为富有情绪的视觉诗篇。每一次滚动，都是一次交互的邀请。
+                                    </p>
+                                    <button className="interactable group flex items-center gap-4 text-sm font-sans tracking-widest uppercase pb-2 border-b border-white/30 hover:border-white transition-colors">
+                                        <span>Explore Article</span>
+                                        <i data-lucide="arrow-right" className="w-4 h-4 transform group-hover:translate-x-2 transition-transform"></i>
+                                    </button>
+                                </div>
+
+                                {/* Right Image (Placeholder mapping to Ocean/Abstract theme) */}
+                                <div className="w-full md:w-7/12 image-container reveal-left">
+                                    <div className="relative aspect-[4/5] w-full bg-ocean-dark rounded-sm overflow-hidden group">
+                                        <img
+                                            src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                                            alt="Abstract coding and ocean waves"
+                                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 mix-blend-luminosity"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#050a12] via-transparent to-transparent opacity-60"></div>
+                                        <div className="absolute bottom-6 left-6 font-sans text-xs tracking-widest uppercase">
+                                            [ Fig. 1 ] — Digital Waves
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Another Magazine Spread Example */}
+                    <section className="py-32 px-6 md:px-12 w-full">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse gap-12 lg:gap-24 items-center">
+                            <div className="w-full md:w-4/12 reveal-up">
+                                <h3 className="font-sans text-xs tracking-widest uppercase mb-4 opacity-60">Chapter 02</h3>
+                                <h2 className="font-serif text-4xl md:text-5xl mb-6">无声的<br />留白空间</h2>
+                                <p className="font-sans text-sm leading-loose opacity-80">
+                                    在信息过载的屏幕上，我们吝啬于使用像素。用大面积的留白承托核心文字，让读者的视线得以呼吸。这是属于 Web 媒介的极简主义美学。
+                                </p>
+                            </div>
+
+                            <div className="w-full md:w-8/12 grid grid-cols-2 gap-4 md:gap-8 reveal-up">
+                                <div className="image-container aspect-[3/4] mt-12">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        alt="Abstract architecture"
+                                        className="w-full h-full object-cover mix-blend-luminosity opacity-70"
+                                    />
+                                </div>
+                                <div className="image-container aspect-[3/4]">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        alt="Minimalist landscape"
+                                        className="w-full h-full object-cover mix-blend-luminosity opacity-70"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer / Call to Action */}
+                    <footer className="relative min-h-[70vh] flex flex-col items-center justify-center border-t border-white/10 px-6 mt-20">
+                        <div className="text-center reveal-up z-10">
+                            <h2 className="font-serif text-5xl md:text-7xl mb-8">参与这场数字实验</h2>
+                            <p className="font-sans text-sm tracking-widest uppercase opacity-60 mb-12">
+                                We are looking for design & tech partners.
+                            </p>
+                            <a href="#" className="interactable inline-block px-10 py-4 border border-white/30 rounded-full font-sans text-sm tracking-widest uppercase hover:bg-white hover:text-ocean-dark transition-all duration-300">
+                                成为主理合伙人
+                            </a>
+                        </div>
+
+                        <div className="absolute bottom-6 w-full px-6 flex justify-between items-center text-xs font-sans opacity-40 uppercase tracking-widest">
+                            <span>© 2026 LIOCEAN</span>
+                            <span>Code & Poetry</span>
+                        </div>
+                    </footer>
                 </div>
-                <div class="ai-tools">
-                    <span>🎤</span>
-                    <span>⬆️</span>
-                </div>
-            </div>
-        </div>
+            );
+        };
 
-    </main>
+        // Render App
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
 
+        // Initialize Lucide Icons
+        setTimeout(() => {
+            lucide.createIcons();
+        }, 100);
+    </script>
 </body>
 
 </html>
