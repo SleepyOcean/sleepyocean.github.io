@@ -1,0 +1,12 @@
+{
+  "name": "沉睡的海洋",
+  "short_name": "沉睡的海洋",
+  "description": "Java架构师博客,简洁至上,专注Java架构的学习与总结。Java,Spring,中间件,Docker,Linux,vue,js,css3,html5,Node,git,github等技术文章。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#11a8cd",
+  "lang": "zh-CN"
+}
