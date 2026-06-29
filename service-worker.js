@@ -27,11 +27,11 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "71de814c397986c91d3f159bafe37380"
+    "revision": "eb54cea447cb11913242afaef6dd7f58"
   },
   {
     "url": "archives/index.html",
-    "revision": "efe4efbbf1a8406a6a79dd4aad62dad5"
+    "revision": "0f45c8bdcf729890ec24ee5e5ec56ae5"
   },
   {
     "url": "assets/20ee9defb89782060a728ff4aa964023.webp",
@@ -154,8 +154,8 @@ self.__precacheManifest = [
     "revision": "43e9d8b0ce79d7af95d9b9e237c8bc1d"
   },
   {
-    "url": "assets/js/app.6843f7e3.js",
-    "revision": "6894703ad8cac714929beeb584a1ca61"
+    "url": "assets/js/app.d038d216.js",
+    "revision": "7e516660651cc2aa1f6cb5bb85659f10"
   },
   {
     "url": "assets/tai-chi.webp",
@@ -163,15 +163,15 @@ self.__precacheManifest = [
   },
   {
     "url": "categories/index.html",
-    "revision": "9b4f338daa37369d5d7580d94214db9d"
+    "revision": "8d72004734754491eb5e1878711bb685"
   },
   {
     "url": "index.html",
-    "revision": "09284ec3058abdf801a62cd135c3e30e"
+    "revision": "42734cb91fdfc31a06df77dc4c507a50"
   },
   {
     "url": "learning/index.html",
-    "revision": "edbe2b75508e3290ea162786890fc544"
+    "revision": "81cb7c45d7e696b7ce14fc654d08927e"
   },
   {
     "url": "manifest.json",
@@ -183,27 +183,27 @@ self.__precacheManifest = [
   },
   {
     "url": "pages/7a5ff0/index.html",
-    "revision": "e319b17998eef9df1541454b6953ffcf"
+    "revision": "b1e5309c5a3184785fad938da801577a"
   },
   {
     "url": "practice/index.html",
-    "revision": "3ac4cb302cdad8ea54a4301a96cc4816"
+    "revision": "8c13e60ee4a219e6401ba8e0a706b56f"
   },
   {
     "url": "tags/index.html",
-    "revision": "37efbef6ecb12fa0dc4d6211857c4c70"
+    "revision": "f568e727022ed6ce4b277e6f0e5e35f3"
   },
   {
     "url": "tech/index.html",
-    "revision": "2010487648fc861ceb3dc082ef1ee480"
+    "revision": "8a73cf5b4d5bb9357616794d9a41dc44"
   },
   {
     "url": "thoughts/index.html",
-    "revision": "50603a6fe259cb4cbdc097908ece4a78"
+    "revision": "681114994bffa275c5df0866197900a3"
   },
   {
     "url": "travel/index.html",
-    "revision": "95de9b567332fa2b7b76483a0305bb72"
+    "revision": "a439a188d53788f362d0ecc24a72481b"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
